@@ -12,18 +12,18 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 6              //размер поля
-#define ROWS 3           //кол-во блоков по строкам
-#define COLS 3           //кол-во блоков по столбцам
-#define MIN_BLACK 5      //минимальное число черных клеток
-#define MAX_BLACK 10     //максимальное число черных клеток
-#define MAX_ATTEMPTS 500 //максимальное число попыток генерации
-#define SHOW_PUZZLE 0    //режим вывода головоломки
-#define SHOW_SOLUTION 1  //режим вывода решения
+#define N 6              /*размер поля*/
+#define ROWS 3           /*кол-во блоков по строкам*/
+#define COLS 3           /*кол-во блоков по столбцам*/
+#define MIN_BLACK 5      /*минимальное число черных клеток*/
+#define MAX_BLACK 10     /*максимальное число черных клеток*/
+#define MAX_ATTEMPTS 500 /*максимальное число попыток генерации*/
+#define SHOW_PUZZLE 0    /*режим вывода головоломки*/
+#define SHOW_SOLUTION 1  /*режим вывода решения*/
 
 typedef struct {
-    int field[N][N];   //поле с: 0 — белая, 1 — чёрная
-    int room_id[N][N]; //ID комнат
+    int field[N][N];   /*поле с: 0 — белая, 1 — чёрная*/
+    int room_id[N][N]; /*ID комнат*/
 } game_t;
 
 void log_error(const char* msg);
@@ -36,11 +36,10 @@ int generate_game(game_t* pgame, int room_blacks[]);
 void print_field(game_t* pgame, int room_blacks[], int show_solution);
 int save_field_to_file(game_t* pgame, int room_blacks[]);
 
-int main(void)
-{
-    game_t game;                  //структура игры
-    int room_blacks[ROWS * COLS]; //черные клетки по комнатам
-    int generated = 0;            //флаг генерации
+int main(void) {
+    game_t game;                  /*структура игры*/
+    int room_blacks[ROWS * COLS]; /*черные клетки по комнатам*/
+    int generated = 0;            /*флаг генерации*/
 
     srand((unsigned)time(NULL));
 
@@ -109,8 +108,7 @@ int main(void)
 *
 * Записывает сообщение об ошибке в файл error.log
 */
-void log_error(const char* msg)
-{
+void log_error(const char* msg) {
     FILE* file = fopen("error.log", "a");
 
     if (file) {
@@ -125,12 +123,11 @@ void log_error(const char* msg)
  * @param pgame - указатель на структуру игры
  * @return 1 при успешной генерации
  */
-int generate_rooms(game_t* pgame)
-{
+int generate_rooms(game_t* pgame) {
     int row_h[ROWS];
     int col_w[COLS];
 
-    //подбор высоты комнаты
+    /*подбор высоты комнаты*/
     while (1) {
         row_h[0] = 1 + rand() % 4;
         row_h[1] = 1 + rand() % 4;
@@ -141,7 +138,7 @@ int generate_rooms(game_t* pgame)
         }
     }
 
-    //подбор ширины комнаты
+    /*подбор ширины комнаты*/
     while (1) {
         col_w[0] = 1 + rand() % 4;
         col_w[1] = 1 + rand() % 4;
@@ -152,33 +149,33 @@ int generate_rooms(game_t* pgame)
         }
     }
 
-    int x = 0;    //текущая координата x (строка) для блока
-    int room = 0; //текущая комната
+    int x = 0;    /*текущая координата x (строка) для блока*/
+    int room = 0; /*текущая комната*/
 
     for (int row_block = 0; row_block < ROWS; row_block++) {
 
-        int y = 0; //текущая координата y (столбец) для блока
+        int y = 0; /*текущая координата y (столбец) для блока*/
 
         for (int col_block = 0; col_block < COLS; col_block++) {
 
-            int h = row_h[row_block]; //высота комнаты (количество строк)
-            int w = col_w[col_block]; //ширина комнаты (количество столбцов)
+            int h = row_h[row_block]; /*высота комнаты (количество строк)*/
+            int w = col_w[col_block]; /*ширина комнаты (количество столбцов)*/
 
             int total = h * w;
 
             for (int k = 0; k < total; k++) {
 
-                int ix = x + (k / w); //строка внутри блока
-                int iy = y + (k % w); //столбец внутри блока
+                int ix = x + (k / w); /*строка внутри блока*/
+                int iy = y + (k % w); /*столбец внутри блока*/
 
                 pgame->room_id[ix][iy] = room;
             }
 
-            y += w; //сдвигаем y (столбец) на ширину комнаты
+            y += w; /*сдвигаем y (столбец) на ширину комнаты*/
             room++;
         }
 
-        x += row_h[row_block]; //сдвиг вниз (по строкам) после работы со строкой блоков
+        x += row_h[row_block]; /*сдвиг вниз (по строкам) после работы со строкой блоков*/
     }
 
     return 1;
@@ -192,12 +189,11 @@ int generate_rooms(game_t* pgame)
  * @param y - столбец
  * @return 1 если можно ставить, 0 если нельзя
  */
-int black_rule(game_t* pgame, int x, int y)
-{
-    if (x > 0 && pgame->field[x - 1][y]) return 0;     //левый сосед
-    if (x < N - 1 && pgame->field[x + 1][y]) return 0; //правый сосед
-    if (y > 0 && pgame->field[x][y - 1]) return 0;     //верхний сосед
-    if (y < N - 1 && pgame->field[x][y + 1]) return 0; //нижний сосед
+int black_rule(game_t* pgame, int x, int y) {
+    if (x > 0 && pgame->field[x - 1][y]) return 0;     /*левый сосед*/
+    if (x < N - 1 && pgame->field[x + 1][y]) return 0; /*правый сосед*/
+    if (y > 0 && pgame->field[x][y - 1]) return 0;     /*верхний сосед*/
+    if (y < N - 1 && pgame->field[x][y + 1]) return 0; /*нижний сосед*/
     return 1;
 }
 
@@ -207,8 +203,7 @@ int black_rule(game_t* pgame, int x, int y)
  * @param pgame - игровое поле
  * @return 1 если правило соблюдено, 0 если нарушено
  */
-int rooms_rule(game_t* pgame)
-{
+int rooms_rule(game_t* pgame) {
     /*Проверка строк*/
     for (int x = 0; x < N; x++) {
         int last = -1;
@@ -216,7 +211,7 @@ int rooms_rule(game_t* pgame)
 
         for (int y = 0; y < N; y++) {
 
-            if (pgame->field[x][y] == 1) { //клетка черная 
+            if (pgame->field[x][y] == 1) { /*клетка черная*/
                 last = -1;
                 count = 0;
             }
@@ -242,7 +237,7 @@ int rooms_rule(game_t* pgame)
 
         for (int x = 0; x < N; x++) {
 
-            if (pgame->field[x][y] == 1) { //клетка черная
+            if (pgame->field[x][y] == 1) { /*клетка черная*/
                 last = -1;
                 count = 0;
             }
@@ -271,26 +266,25 @@ int rooms_rule(game_t* pgame)
  * @param pblacks - указатель для возврата количества поставленных чёрных клеток
  * @return 1 при успехе, 0 при ошибке
  */
-int place_black(game_t* pgame, int* pblacks)
-{
-    int placed = 0;   //счетчик размещенных черных клеток
-    int attempts = 0; //счетчик попыток размещения
+int place_black(game_t* pgame, int* pblacks) {
+    int placed = 0;   /*счетчик размещенных черных клеток*/
+    int attempts = 0; /*счетчик попыток размещения*/
 
-    //Очистка поля
+    /*Очистка поля*/
     for (int x = 0; x < N; x++) {
         for (int y = 0; y < N; y++) {
             pgame->field[x][y] = 0;
         }
     }
 
-    int target = MIN_BLACK + rand() % (MAX_BLACK - MIN_BLACK + 1); //случайное количество точек для выставления (Мин-Макс)
+    int target = MIN_BLACK + rand() % (MAX_BLACK - MIN_BLACK + 1); /*случайное количество точек для выставления (Мин-Макс)*/
 
     while (placed < target && attempts < MAX_ATTEMPTS) {
-        int x = rand() % N; //случайная строка
-        int y = rand() % N; //случайный столбец
+        int x = rand() % N; /*случайная строка*/
+        int y = rand() % N; /*случайный столбец*/
         attempts++;
 
-        if (pgame->field[x][y] == 1) { //клетка уже черная
+        if (pgame->field[x][y] == 1) { /*клетка уже черная*/
             continue;
         }
 
@@ -298,7 +292,7 @@ int place_black(game_t* pgame, int* pblacks)
             continue;
         }
 
-        pgame->field[x][y] = 1; //ставим черную
+        pgame->field[x][y] = 1; /*ставим черную*/
         placed++;
     }
 
@@ -313,8 +307,7 @@ int place_black(game_t* pgame, int* pblacks)
  * @param room_blacks - массив для хранения количества черных
  * @return 1 при успехе, 0 при ошибке
  */
-int generate_game(game_t* pgame, int room_blacks[])
-{
+int generate_game(game_t* pgame, int room_blacks[]) {
     for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
 
         generate_rooms(pgame);
@@ -345,8 +338,7 @@ int generate_game(game_t* pgame, int room_blacks[])
  * @param room_blacks -  массив для заполнения количества черных
  * @return 1
  */
-int count_blacks_in_rooms(game_t* pgame, int room_blacks[])
-{
+int count_blacks_in_rooms(game_t* pgame, int room_blacks[]) {
     for (int i = 0; i < ROWS * COLS; i++) {
         room_blacks[i] = 0;
     }
@@ -373,21 +365,20 @@ int count_blacks_in_rooms(game_t* pgame, int room_blacks[])
  * @param room_blacks - массив с количеством черных клеток в комнатах
  * @param mode - режим вывода
  */
-void print_field(game_t* pgame, int room_blacks[], int show_solution)
-{
+void print_field(game_t* pgame, int room_blacks[], int show_solution) {
     int printed[ROWS * COLS] = { 0 };
 
-    //Верхняя граница
+    /*Верхняя граница*/
     for (int y = 0; y < N; y++) {
         printf("+===");
     }
 
     printf("+\n");
 
-    //Вывод строк
+    /*Вывод строк*/
     for (int x = 0; x < N; x++) {
 
-        //Вывод ячеек строки
+        /*Вывод ячеек строки*/
         for (int y = 0; y < N; y++) {
 
             if (y == 0 || pgame->room_id[x][y] != pgame->room_id[x][y - 1]) {
@@ -415,7 +406,7 @@ void print_field(game_t* pgame, int room_blacks[], int show_solution)
 
         printf("#\n");
 
-        //Вывод нижних границ
+        /*Вывод нижних границ*/
         for (int y = 0; y < N; y++) {
             printf("+");
 
@@ -438,8 +429,7 @@ void print_field(game_t* pgame, int room_blacks[], int show_solution)
  * @param room_blacks - чёрные клетки по комнатам
  * @return 1 при успехе, 0 при ошибке
  */
-int save_field_to_file(game_t* pgame, int room_blacks[])
-{
+int save_field_to_file(game_t* pgame, int room_blacks[]) {
     FILE* file;
     int x;
     int y;
@@ -451,17 +441,17 @@ int save_field_to_file(game_t* pgame, int room_blacks[])
         return 0;
     }
 
-    //Верхняя граница
+    /*Верхняя граница*/
     for (y = 0; y < N; y++) {
         fprintf(file, "+===");
     }
 
     fprintf(file, "+\n");
 
-    //Вывод строк
+    /*Вывод строк*/
     for (x = 0; x < N; x++) {
 
-        //Вывод ячеек строки
+        /*Вывод ячеек строки*/
         for (y = 0; y < N; y++) {
 
             if (y == 0 || pgame->room_id[x][y] != pgame->room_id[x][y - 1]) {
@@ -485,7 +475,7 @@ int save_field_to_file(game_t* pgame, int room_blacks[])
 
         fprintf(file, "#\n");
 
-        //Вывод нижних границ
+        /*Вывод нижних границ*/
         for (y = 0; y < N; y++) {
             fprintf(file, "+");
 
