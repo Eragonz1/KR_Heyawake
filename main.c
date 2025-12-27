@@ -44,7 +44,8 @@ int main(void)
 
     srand((unsigned)time(NULL));
 
-    printf("Генератор поля Хэяваке 6x6\n");
+    printf("Генератор игровых полей 'Хэявакэ'\n");
+    printf("Выполнил: Золотарев Даниил бИЦ-251\n");
 
     while (1) {
         int cmd;
