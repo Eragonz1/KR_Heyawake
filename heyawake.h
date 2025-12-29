@@ -24,7 +24,7 @@ void log_error(const char* msg);
 int generate_rooms(game_t* pgame);
 int black_rule(game_t* pgame, int x, int y);
 int rooms_rule(game_t* pgame);
-int place_black(game_t* pgame, int* pblacks);
+int place_black(game_t* pgame);
 int count_blacks_in_rooms(game_t* pgame, int room_blacks[]);
 int generate_game(game_t* pgame, int room_blacks[]);
 void print_field(game_t* pgame, int room_blacks[], int show_solution);

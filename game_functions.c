@@ -171,7 +171,7 @@ int rooms_rule(game_t* pgame) {
  * @param pblacks - указатель для возврата количества поставленных чёрных клеток
  * @return 1 при успехе, 0 при ошибке
  */
-int place_black(game_t* pgame, int* pblacks) {
+int place_black(game_t* pgame) {
     int placed = 0;   /*счетчик размещенных черных клеток*/
     int attempts = 0; /*счетчик попыток размещения*/
 
@@ -201,7 +201,6 @@ int place_black(game_t* pgame, int* pblacks) {
         placed++;
     }
 
-    *pblacks = placed;
     return (placed >= MIN_BLACK);
 }
 
@@ -217,9 +216,7 @@ int generate_game(game_t* pgame, int room_blacks[]) {
 
         generate_rooms(pgame);
 
-        int blacks;
-
-        if (place_black(pgame, &blacks) == 0) {
+        if (place_black(pgame) == 0) {
             continue;
         }
 
